@@ -46,7 +46,14 @@ public partial class Settings : ObservableRecipient
     [ObservableProperty] private WindowState windowState = WindowState.Normal;
     [ObservableProperty] private bool alwaysShowDetailedCompressionMode = false;
 
-    [ObservableProperty] private string language = "en-US";
+    [ObservableProperty] private string language = "en-AU";
+
+    [ObservableProperty] private bool bypassLowSpaceProtection = false;
+
+    [ObservableProperty] private bool disableHardwareRendering = false;
+
+    [ObservableProperty] private bool hideSteamLibraryTab = false;
+    [ObservableProperty] private bool hideCompressionDbTab = false;
 
     partial void OnScheduledBackgroundIntervalChanged(int value) => UpdateNextScheduledBackgroundRun();
 
@@ -58,14 +65,14 @@ public partial class Settings : ObservableRecipient
 
     private void UpdateNextScheduledBackgroundRun()
     {
-        DateTime nextRun = scheduledBackgroundLastRan.Date
-                 .AddDays(scheduledBackgroundInterval)
-                 .AddHours(scheduledBackgroundHour)
-                 .AddMinutes(scheduledBackgroundMinute);
+        DateTime nextRun = ScheduledBackgroundLastRan.Date
+                 .AddDays(ScheduledBackgroundInterval)
+                 .AddHours(ScheduledBackgroundHour)
+                 .AddMinutes(ScheduledBackgroundMinute);
         DateTime now = DateTime.Now;
         while (nextRun <= now)
         {
-            nextRun = nextRun.AddDays(scheduledBackgroundInterval == 0 ? 1 : scheduledBackgroundInterval);
+            nextRun = nextRun.AddDays(ScheduledBackgroundInterval == 0 ? 1 : ScheduledBackgroundInterval);
         }
 
         NextScheduledBackgroundRun = nextRun;

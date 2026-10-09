@@ -20,12 +20,16 @@ Public Class WatchedFolder
     <ObservableProperty> Private _LastCheckedDate As DateTime
     <ObservableProperty> Private _LastCheckedSize As Long
     <ObservableProperty> Private _CompressionLevel As Core.WOFCompressionAlgorithm
+    <ObservableProperty> Private _SkipList As List(Of String)
 
     <AttachAttribute(GetType(JsonIgnoreAttribute))>
     <ObservableProperty> Private _IsWorking As Boolean
 
     <AttachAttribute(GetType(JsonIgnoreAttribute))>
     <ObservableProperty> Private _IsEditing As Boolean = False
+
+    <AttachAttribute(GetType(JsonIgnoreAttribute))>
+    <ObservableProperty> Private _IsDriveUnavailable As Boolean = False
 
     ' --- Monitoring State ---
     <AttachAttribute(GetType(JsonIgnoreAttribute))>
@@ -65,13 +69,13 @@ Public Class WatchedFolder
     End Sub
 
     Public Sub PauseMonitoring()
-        If FSWatcher IsNot Nothing Then
+        If FSWatcher IsNot Nothing AndAlso Not IsDriveUnavailable Then
             FSWatcher.EnableRaisingEvents = False
         End If
     End Sub
 
     Public Sub ResumeMonitoring()
-        If FSWatcher IsNot Nothing Then
+        If FSWatcher IsNot Nothing AndAlso Not IsDriveUnavailable Then
             FSWatcher.EnableRaisingEvents = True
         End If
     End Sub

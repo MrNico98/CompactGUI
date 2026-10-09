@@ -3,12 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:core="clr-namespace:CompactGUI.Core;assembly=CompactGUI.Core"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:loc="clr-namespace:LazyTranslate;assembly=LazyTranslate"
              xmlns:local="clr-namespace:CompactGUI"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-             
              d:DataContext="{d:DesignInstance Type=local:FolderViewModel}"
-             d:DesignHeight="450" d:DesignWidth="900" d:Foreground="White"
+             d:DesignHeight="450"
+             d:DesignWidth="900"
+             d:Foreground="White"
              RenderOptions.ClearTypeHint="Enabled"
              mc:Ignorable="d">
 
@@ -17,170 +19,341 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ui:TextBlock Text="{local:Localize CompressionMode}"
-                      d:Text="Compression Mode"
-                      Margin="0,30,0,20" VerticalAlignment="Center"
-                      FontSize="16" FontWeight="SemiBold" />
+        <ui:TextBlock Margin="0 30 0 20" VerticalAlignment="Center"
+                      loc:L.Value="Choose Compression" FontSize="14" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display" />
 
-        <WrapPanel Grid.Row="1"
-                   Margin="0,0,0,0" ToolTipService.HasDropShadow="True" ToolTipService.Placement="Bottom"
-                   Orientation="Horizontal">
+        <Grid Grid.Row="1" Margin="0 10 0 0" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MaxWidth="200" />
+                <ColumnDefinition Width="1" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            <local:CompressionMode_Radio Width="185" Height="85" IsForcedDetailed="{Binding AlwaysShowDetailsCompressionMode}"
-                                         Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
-                                         BorderBrush="Transparent" CompressionMode="{local:Localize CompressionMode_XPRESS4K}"
-                                         d:CompressionMode="XPRESS 4K" EstimatedVisibility="Visible"
+
+            <Border Grid.ColumnSpan="7"
+                    Height="80"
+                    Background="#00FFFFFF" BorderBrush="#20FFFFFF" BorderThickness="1" CornerRadius="6" />
+
+
+            <StackPanel Margin="10 0" VerticalAlignment="Center">
+
+                <TextBlock FontSize="30" FontWeight="SemiBold" Foreground="#50c8ed">
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource SelectedModeEstimatedSavingsConverter}" StringFormat="{}≈ {0}">
+                            <Binding Path="Folder.WikiCompressionResults" />
+                            <Binding Path="Folder.CompressionOptions.SelectedCompressionMode" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+
+                <TextBlock Grid.Row="3" Grid.Column="0"
+                           Margin="30 0 0 6" HorizontalAlignment="Left"
+                           FontSize="12" FontWeight="SemiBold"
+                           Foreground="{StaticResource TextControlForegroundDisabled}"
+                           loc:L.Value="estimated savings" TextOptions.TextFormattingMode="Display" />
+
+            </StackPanel>
+            <Separator Grid.Column="1"
+                       Margin="0 10"
+                       BorderBrush="#40FFFFFF" BorderThickness="1" />
+
+            <Grid Grid.Column="2" Margin="30 10 10 10" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="90" MaxWidth="150" />
+                    <ColumnDefinition Width="*" MaxWidth="100" />
+                    <ColumnDefinition Width="auto" MinWidth="35" />
+                    <ColumnDefinition Width="*" MaxWidth="150" />
+                    <ColumnDefinition Width="*" MinWidth="90" MaxWidth="150" />
+
+                    <ColumnDefinition Width="*" MinWidth="80" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <TextBlock FontSize="11" FontWeight="SemiBold"
+                           Foreground="{StaticResource TextControlForegroundDisabled}"
+                           loc:L.Value="Original Size" TextOptions.TextFormattingMode="Display" />
+                <TextBlock Grid.Row="1"
+                           FontSize="20" FontWeight="SemiBold"
+                           Text="{Binding Folder.UncompressedBytes, Converter={StaticResource BytesToReadableConverter}}" />
+
+
+                <ui:SymbolIcon Grid.Row="1" Grid.Column="2"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Foreground="{StaticResource TextControlForegroundDisabled}"
+                               Symbol="ArrowRight20" />
+
+
+                <TextBlock Grid.Column="4"
+                           FontSize="11" FontWeight="SemiBold"
+                           Foreground="{StaticResource TextControlForegroundDisabled}"
+                           loc:L.Value="Estimated Size" TextOptions.TextFormattingMode="Display" />
+                <TextBlock Grid.Row="1" Grid.Column="4"
+                           FontSize="20" FontWeight="SemiBold">
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource SelectedModeEstimatedSavingsConverter}" ConverterParameter="AB" StringFormat="{}≈ {0}">
+                            <Binding Path="Folder.WikiCompressionResults" />
+                            <Binding Path="Folder.CompressionOptions.SelectedCompressionMode" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+
+                <ProgressBar Grid.Row="2" Grid.ColumnSpan="6"
+                             Height="8"
+                             Margin="0 5"
+                             Background="#40FFFFFF" BorderThickness="0" FlowDirection="RightToLeft" Foreground="#58d895"
+                             Maximum="{Binding Folder.UncompressedBytes}"
+                             Value="{Binding Folder.BytesSaved, Mode=OneWay}" />
+
+
+            </Grid>
+
+        </Grid>
+
+        <ui:TextBlock Grid.Row="2"
+                      Margin="0 10 0 5" VerticalAlignment="Center"
+                      loc:L.Value="COMPARE METHODS" FontSize="11" FontWeight="SemiBold"
+                      Foreground="{StaticResource TextControlForegroundDisabled}"
+                      TextOptions.TextFormattingMode="Display" Visibility="Collapsed" />
+
+        <WrapPanel Grid.Row="3"
+                   Margin="0 0 0 0"
+                   Orientation="Horizontal" ToolTipService.HasDropShadow="True" ToolTipService.Placement="Bottom">
+
+            <local:CompressionMode_Radio Width="185" Height="85"
+                                         Margin="0 0 20 10"
+                                         d:CompressionMode="XPRESS 4K" BorderBrush="Transparent"
+                                         BytesAfter="{Binding Folder.WikiCompressionResults.XPress4K.AfterBytes}"
+                                         BytesSaved="{Binding Folder.WikiCompressionResults.XPress4K.BytesSaved}"
+                                         Checked="CompressionMode_Radio_Checked"
+                                         CompressionMode="{loc:T 'XPRESS 4K'}"
+                                         EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS4K}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
+                                         IsForcedDetailed="{Binding AlwaysShowDetailsCompressionMode}"
                                          ProgressValue="{Binding Folder.WikiCompressionResults.XPress4K.CompressionSavings}"
-                                         Savings="{Binding Folder.WikiCompressionResults.XPress4K.CompressionSavings}"
-                                         BytesAfter="{Binding Folder.WikiCompressionResults.XPress4K.AfterBytes}"
-                                         BytesSaved="{Binding Folder.WikiCompressionResults.XPress4K.BytesSaved}"   
-                                         />
-            <local:CompressionMode_Radio Width="185" Height="85" IsForcedDetailed="{Binding AlwaysShowDetailsCompressionMode}"
-                                         Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
-                                         BorderBrush="Transparent" CompressionMode="{local:Localize CompressionMode_XPRESS8K}"
-                                         d:CompressionMode="XPRESS 8K" EstimatedVisibility="Visible"
+                                         Savings="{Binding Folder.WikiCompressionResults.XPress4K.CompressionSavings}" />
+            <local:CompressionMode_Radio Width="185" Height="85"
+                                         Margin="0 0 20 10"
+                                         d:CompressionMode="XPRESS 8K" BorderBrush="Transparent"
+                                         BytesAfter="{Binding Folder.WikiCompressionResults.XPress8K.AfterBytes}"
+                                         BytesSaved="{Binding Folder.WikiCompressionResults.XPress8K.BytesSaved}"
+                                         Checked="CompressionMode_Radio_Checked"
+                                         CompressionMode="{loc:T 'XPRESS 8K'}"
+                                         EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS8K}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
+                                         IsForcedDetailed="{Binding AlwaysShowDetailsCompressionMode}"
                                          ProgressValue="{Binding Folder.WikiCompressionResults.XPress8K.CompressionSavings}"
-                                         Savings="{Binding Folder.WikiCompressionResults.XPress8K.CompressionSavings}"
-                                         BytesAfter="{Binding Folder.WikiCompressionResults.XPress8K.AfterBytes}"
-                                         BytesSaved="{Binding Folder.WikiCompressionResults.XPress8K.BytesSaved}"   
-                                         />
-            <local:CompressionMode_Radio Width="185" Height="85" IsForcedDetailed="{Binding AlwaysShowDetailsCompressionMode}"
-                                         Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
-                                         BorderBrush="Transparent" CompressionMode="{local:Localize CompressionMode_XPRESS16K}"
-                                         d:CompressionMode="XPRESS 16K" EstimatedVisibility="Visible"
+                                         Savings="{Binding Folder.WikiCompressionResults.XPress8K.CompressionSavings}" />
+            <local:CompressionMode_Radio Width="185" Height="85"
+                                         Margin="0 0 20 10"
+                                         d:CompressionMode="XPRESS 16K" BorderBrush="Transparent"
+                                         BytesAfter="{Binding Folder.WikiCompressionResults.XPress16K.AfterBytes}"
+                                         BytesSaved="{Binding Folder.WikiCompressionResults.XPress16K.BytesSaved}"
+                                         Checked="CompressionMode_Radio_Checked"
+                                         CompressionMode="{loc:T 'XPRESS 16K'}"
+                                         EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.XPRESS16K}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
+                                         IsForcedDetailed="{Binding AlwaysShowDetailsCompressionMode}"
                                          ProgressValue="{Binding Folder.WikiCompressionResults.XPress16K.CompressionSavings}"
-                                         Savings="{Binding Folder.WikiCompressionResults.XPress16K.CompressionSavings}"
-                                         BytesAfter="{Binding Folder.WikiCompressionResults.XPress16K.AfterBytes}"
-                                         BytesSaved="{Binding Folder.WikiCompressionResults.XPress16K.BytesSaved}"   
-                                         />
-            <local:CompressionMode_Radio Width="185" Height="85" IsForcedDetailed="{Binding AlwaysShowDetailsCompressionMode}"
-                                         Margin="0,0,20,10" Checked="CompressionMode_Radio_Checked"
-                                         BorderBrush="Transparent" CompressionMode="{local:Localize CompressionMode_LZX}"
-                                         d:CompressionMode="LZX" EstimatedVisibility="Visible"
+                                         Savings="{Binding Folder.WikiCompressionResults.XPress16K.CompressionSavings}" />
+            <local:CompressionMode_Radio Width="185" Height="85"
+                                         Margin="0 0 -20 10"
+                                         d:CompressionMode="LZX" BorderBrush="Transparent"
+                                         BytesAfter="{Binding Folder.WikiCompressionResults.LZX.AfterBytes}"
+                                         BytesSaved="{Binding Folder.WikiCompressionResults.LZX.BytesSaved}"
+                                         Checked="CompressionMode_Radio_Checked"
+                                         CompressionMode="{loc:T 'LZX'}"
+                                         EstimatedVisibility="Visible"
                                          IsChecked="{Binding Folder.CompressionOptions.SelectedCompressionMode, Converter={StaticResource EnumToRadioButtonConverter}, ConverterParameter={x:Static core:CompressionMode.LZX}, Mode=TwoWay}"
                                          IsEstimating="{Binding Folder.IsGettingEstimate}"
+                                         IsForcedDetailed="{Binding AlwaysShowDetailsCompressionMode}"
                                          ProgressValue="{Binding Folder.WikiCompressionResults.LZX.CompressionSavings}"
-                                         Savings="{Binding Folder.WikiCompressionResults.LZX.CompressionSavings}" 
-                                         BytesAfter="{Binding Folder.WikiCompressionResults.LZX.AfterBytes}"
-                                         BytesSaved="{Binding Folder.WikiCompressionResults.LZX.BytesSaved}"   
-                                         />
+                                         Savings="{Binding Folder.WikiCompressionResults.LZX.CompressionSavings}" />
 
             <WrapPanel.ToolTip>
-                <ToolTip Visibility="Collapsed" MaxWidth="500" Background="Transparent" ClipToBounds="False" BorderThickness="0" BorderBrush="Transparent">
+                <ToolTip MaxWidth="500"
+                         Background="Transparent" BorderBrush="Transparent" BorderThickness="0" ClipToBounds="False" Visibility="Collapsed">
 
-                    <Border Margin="5" Background="#4e6379" Padding="10" CornerRadius="5">
+                    <Border Margin="5" Padding="10"
+                            Background="#4e6379" CornerRadius="5">
                         <Border.Effect>
-                            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.4" Direction="0"/>
+                            <DropShadowEffect BlurRadius="10" Direction="0" Opacity="0.4" ShadowDepth="0" />
                         </Border.Effect>
                         <TextBlock TextAlignment="Left">
-    <Bold>For Steam Games:</Bold> estimate is based on database results
-    <LineBreak />
-    <LineBreak />
-    <Bold>For Non-Steam Folders:</Bold> estimate is calculated by block analysis.<LineBreak />
-    If estimation is disabled, this will always show 0%</TextBlock>
+                            <Bold>For Steam Games:</Bold>
+                            estimate is based on database results<LineBreak />
+                            <LineBreak />
+                            <Bold>For Non-Steam Folders:</Bold>
+                            estimate is calculated by block analysis.<LineBreak />
+                            If estimation is disabled, this will always show 0%</TextBlock>
                     </Border>
-                    
+
                 </ToolTip>
             </WrapPanel.ToolTip>
 
         </WrapPanel>
 
+        <Separator Grid.Row="4"
+                   Margin="0 5" VerticalAlignment="Top"
+                   BorderBrush="#20FFFFFF" />
 
-        <StackPanel Grid.Row="2" Margin="0,20,0,0">
-            <!--<StackPanel.Resources>
-                <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#4ca5ff"/>
-                <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="#6fb6ff"/>
-            </StackPanel.Resources>-->
-            <ui:TextBlock Text="{local:Localize CompressionConfiguration}" d:Text="Configuration"
-                          Margin="0,0,0,20" VerticalAlignment="Center"
-                           FontSize="16" FontWeight="SemiBold" />
-            <WrapPanel Margin="0,0,0,15" Orientation="Horizontal">
-                <CheckBox x:Name="UiChkSkipPoorlyCompressed" Checked="UiChkSkipPoorlyCompressed_Checked" Unchecked="UiChkSkipPoorlyCompressed_Unchecked"
-                          Content="{local:Localize CompressionConfiguration_SkipFileTypes}"
-                          d:Content="Skip file types specified in settings"
-                          FontSize="16" 
-                          IsChecked="{Binding Folder.CompressionOptions.SkipPoorlyCompressedFileTypes, Mode=TwoWay}" >
-                   
+        <Grid x:Name="ConfigurationOptionsHost" Grid.Row="5" Margin="-10 0">
+            <Grid.Resources>
+                <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#50c8ed" />
+            </Grid.Resources>
+
+            <Grid x:Name="WideConfigurationOptions">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Style.Triggers>
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <Binding Converter="{StaticResource WidthAtMostConverter}"
+                                             ConverterParameter="600" ElementName="ConfigurationOptionsHost" Path="ActualWidth" />
+                                </DataTrigger.Binding>
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MaxWidth="410" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <CheckBox x:Name="UiChkSkipListEnabled"
+                          VerticalAlignment="Center"
+                          Checked="UiChkSkipListEnabled_Checked" FontSize="16"
+                          IsChecked="{Binding Folder.CompressionOptions.SkipListEnabled, Mode=TwoWay}"
+                          Unchecked="UiChkSkipListEnabled_Unchecked">
+                    <StackPanel Margin="5 0 0 -5" VerticalAlignment="Center">
+                        <ui:TextBlock VerticalAlignment="Center"
+                                      loc:L.Value="Use exclusions" FontSize="13" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display" />
+                        <ui:TextBlock Margin="0 5 0 0" VerticalAlignment="Center"
+                                      FontSize="11" FontWeight="SemiBold"
+                                      Foreground="{StaticResource TextControlForegroundDisabled}"
+                                      Text="{Binding Folder.SkippedFileCount, StringFormat={}{0} files will be skipped}"
+                                      TextOptions.TextFormattingMode="Display" />
+                    </StackPanel>
                 </CheckBox>
-                <TextBlock Margin="10,0,0,0" VerticalAlignment="Center"
-                           FontSize="14" Foreground="#FF98A9B9">
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Text">
-                                <Setter.Value>
-                                    <MultiBinding StringFormat="{}{0} {1}">
-                                        <Binding Path="Folder.GlobalPoorlyCompressedFileCount" />
-                                        <Binding Source="{local:Localize CompressionConfiguration_SkipFile}" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-            </WrapPanel>
-            <WrapPanel Margin="0,0,0,15" Orientation="Horizontal">
-                <CheckBox x:Name="UiChkSkipUserPoorlyCompressed" Checked="UiChkSkipUserPoorlyCompressed_Checked" Unchecked="UiChkSkipUserPoorlyCompressed_Unchecked"
-                          FontSize="16"
-                          IsChecked="{Binding Folder.CompressionOptions.SkipUserSubmittedFiletypes, Mode=TwoWay}">
-                    <TextBlock>
-                        <Run Text="{local:Localize CompressionConfiguration_SkipFileTypesLikelyPoorly}" d:Text="Skip file types likely to compress poorly" />
-                        <InlineUIContainer>
-                            <TextBlock Text="(?)"
-                                    Cursor="Hand" Foreground="#FF98A9B9" TextDecorations="Underline">
-                                    <ToolTipService.ToolTip>
-                                        <ToolTip MaxWidth="450" Placement="Top">
-                                            <TextBlock Text="{local:Localize CompressionConfiguration_SkipFileTypesLikelyPoorlyTip}"
-                                                       TextAlignment="Left" TextWrapping="Wrap" />
-                                        </ToolTip>
-                                    </ToolTipService.ToolTip>
-                            </TextBlock>
-                        </InlineUIContainer>
-                    </TextBlock>
+
+                <ui:Button Margin="14 0 20 0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                           loc:L.Value="Edit list" Background="Transparent" Click="UiEditSkipList_Click" FontSize="13" />
+
+                <Separator Grid.Column="1" HorizontalAlignment="Left" />
+
+                <CheckBox x:Name="uiChkWatchFolderForChanges"
+                          Grid.Column="2"
+                          Margin="10 0 0 0" VerticalAlignment="Center"
+                          Checked="uiChkWatchFolderForChanges_Checked"
+                          IsChecked="{Binding Folder.CompressionOptions.WatchFolderForChanges, Mode=TwoWay}"
+                          Unchecked="uiChkWatchFolderForChanges_Unchecked">
+                    <StackPanel Margin="5 0 0 -5" VerticalAlignment="Center">
+                        <ui:TextBlock VerticalAlignment="Center"
+                                      loc:L.Value="Watch folder for changes" FontSize="13" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display" />
+                        <ui:TextBlock Margin="0 5 0 0" VerticalAlignment="Center"
+                                      FontSize="11" FontWeight="SemiBold"
+                                      Foreground="{StaticResource TextControlForegroundDisabled}"
+                                      Text="Monitors and keeps this folder compressed" TextOptions.TextFormattingMode="Display" />
+                    </StackPanel>
                 </CheckBox>
-                <TextBlock Margin="10,0,0,0" VerticalAlignment="Center"
-                           FontSize="14" Foreground="#FF98A9B9">
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Text">
-                                <Setter.Value>
-                                    <MultiBinding StringFormat="{}{0} {1}">
-                                        <Binding Path="Folder.WikiPoorlyCompressedFilesCount" />
-                                        <Binding Source="{local:Localize CompressionConfiguration_SkipFile}" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-            </WrapPanel>
+            </Grid>
+
+            <StackPanel x:Name="WrappedConfigurationOptions" Margin="10 0">
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <Binding Converter="{StaticResource WidthAtMostConverter}"
+                                             ConverterParameter="600" ElementName="ConfigurationOptionsHost" Path="ActualWidth" />
+                                </DataTrigger.Binding>
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <CheckBox VerticalAlignment="Center"
+                              Checked="UiChkSkipListEnabled_Checked" FontSize="16"
+                              IsChecked="{Binding Folder.CompressionOptions.SkipListEnabled, Mode=TwoWay}"
+                              Unchecked="UiChkSkipListEnabled_Unchecked">
+                        <StackPanel Margin="5 0 0 -5" VerticalAlignment="Center">
+                            <ui:TextBlock VerticalAlignment="Center"
+                                          loc:L.Value="Use exclusions" FontSize="13" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display" />
+                            <ui:TextBlock Margin="0 5 0 0" VerticalAlignment="Center"
+                                          FontSize="11" FontWeight="SemiBold"
+                                          Foreground="{StaticResource TextControlForegroundDisabled}"
+                                          Text="{Binding Folder.SkippedFileCount, StringFormat={}{0} files will be skipped}"
+                                          TextOptions.TextFormattingMode="Display" />
+                        </StackPanel>
+                    </CheckBox>
+                    <ui:Button Grid.Column="1"
+                               Margin="14 0 0 0" HorizontalAlignment="Right" VerticalAlignment="Center"
+                               loc:L.Value="Edit list" Background="Transparent" Click="UiEditSkipList_Click" FontSize="13" />
+                </Grid>
+
+                <Separator Margin="0 3" BorderBrush="#20FFFFFF" />
+
+                <CheckBox Margin="0 0 0 2" VerticalAlignment="Center"
+                          Checked="uiChkWatchFolderForChanges_Checked"
+                          IsChecked="{Binding Folder.CompressionOptions.WatchFolderForChanges, Mode=TwoWay}"
+                          Unchecked="uiChkWatchFolderForChanges_Unchecked">
+                    <StackPanel Margin="5 0 0 -5" VerticalAlignment="Center">
+                        <ui:TextBlock VerticalAlignment="Center"
+                                      loc:L.Value="Watch folder for changes" FontSize="13" FontWeight="SemiBold" TextOptions.TextFormattingMode="Display" />
+                        <ui:TextBlock Margin="0 5 0 0" VerticalAlignment="Center"
+                                      FontSize="11" FontWeight="SemiBold"
+                                      Foreground="{StaticResource TextControlForegroundDisabled}"
+                                      Text="Monitors and keeps this folder compressed" TextOptions.TextFormattingMode="Display" />
+                    </StackPanel>
+                </CheckBox>
+            </StackPanel>
+        </Grid>
+
+        <Separator Grid.Row="6"
+                   Margin="0 5" VerticalAlignment="Top"
+                   BorderBrush="#20FFFFFF" />
 
 
-            <CheckBox x:Name="uiChkWatchFolderForChanges" Content="{local:Localize CompressionConfiguration_WatchFolderChanges}" 
-                      d:Content="Watch folder for changes" Checked="uiChkWatchFolderForChanges_Checked" Unchecked="uiChkWatchFolderForChanges_Unchecked"
-                      Margin="0,0,0,15"
-                      FontSize="16"
-                      IsChecked="{Binding Folder.CompressionOptions.WatchFolderForChanges, Mode=TwoWay}" />
-
-        </StackPanel>
-
-
-        <ui:Button Content="{local:Localize CompressionConfiguration_ApplyAll}"
-                   d:Content="Apply to all"
-                   Grid.Row="3"
-                   Width="140" Height="40"
-                   Margin="0,0,0,10" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                   Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
-                   Command="{Binding ApplyToAllCommand}"
-                   FontSize="16" />
+        <Button Grid.Row="7"
+                Height="40"
+                Margin="0 15 0 10" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                Background="{StaticResource CardBackgroundFillColorSecondaryBrush}"
+                Command="{Binding ApplyToAllCommand}"
+                FontSize="16">
+            <Button.Style>
+                <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding DataContext.Folders.Count, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:HomePage}}}" Value="1">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <TextBlock Text="{Binding DataContext.Folders.Count, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:HomePage}}, StringFormat='{}Apply to all {0} folders in queue'}" />
+        </Button>
 
     </Grid>
 </UserControl>
+

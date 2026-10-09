@@ -17,7 +17,7 @@ Imports Coravel.Scheduling.Schedule
 
 Partial Public Class Application
 
-    Public Shared ReadOnly AppVersion As New SemVersion(4, 0, 0, "beta", 7)
+    Public Shared ReadOnly AppVersion As New SemVersion(4, 0, 0, "beta", 12)
 
     Public Shared ReadOnly Property AppVersionText As String
         Get
@@ -30,7 +30,15 @@ Partial Public Class Application
     Private Shared ReadOnly SettingsService As ISettingsService
 
     Shared Sub New()
-        SettingsService = New SettingsService()
+
+        Dim currentDir = AppContext.BaseDirectory
+        If New IO.DirectoryInfo(currentDir).Name.ToLower = "compactgui" Then
+            SettingsService = New SettingsService(True)
+        Else
+            SettingsService = New SettingsService(False)
+        End If
+
+
         SettingsService.LoadSettings()
 
         AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf OnDomainUnhandledException
@@ -50,6 +58,7 @@ Partial Public Class Application
 
                                'Settings handler
                                services.AddSingleton(Of ISettingsService)(SettingsService)
+                               services.AddSingleton(Of LocalisationService)()
 
                                services.AddLogging(Sub(logging)
                                                        logging.SetMinimumLevel(SettingsService.AppSettings.LogLevel)
@@ -95,6 +104,9 @@ Partial Public Class Application
                                services.AddTransient(Of DatabasePage)()
                                services.AddTransient(Of DatabaseViewModel)()
 
+                               services.AddSingleton(Of SteamMonitorPage)()
+                               services.AddTransient(Of SteamMonitorViewModel)()
+
                                'Other services
                                services.AddSingleton(Of TrayNotifierService)(Function(sp)
                                                                                  Return New TrayNotifierService(sp.GetRequiredService(Of MainWindow)(), Icon.ExtractAssociatedIcon(Environment.ProcessPath), "CompactGUI")
@@ -123,7 +135,6 @@ Partial Public Class Application
         Return TryCast(_host?.Services.GetService(GetType(T)), T)
     End Function
 
-
     Public Shared ReadOnly mutex As New Mutex(False, "Global\CompactGUI")
     Private pipeServerCancellation As New CancellationTokenSource()
     Private pipeServerTask As Task
@@ -147,9 +158,10 @@ Partial Public Class Application
         End If
 
         InitializeHost()
-        LanguageHelper.Initialize(GetService(Of ISettingsService).AppSettings)
+        Await GetService(Of LocalisationService).InitializeAsync()
 
         GetService(Of Watcher.Watcher)()
+        GetService(Of HomeViewModel)()
 
         Await _host.StartAsync()
         Await GetService(Of SettingsViewModel).InitializeEnvironment()

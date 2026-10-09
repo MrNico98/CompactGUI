@@ -2,9 +2,10 @@
 
 <p align="center">
   <a href="https://github.com/IridiumIO/CompactGUI/releases">
-    <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/IridiumIO/CompactGUI/total?style=for-the-badge&logo=github">
-    <img alt="GitHub Release" src="https://img.shields.io/github/v/release/IridiumIO/CompactGUI?style=for-the-badge">
-  </a>
+    <img alt="GitHub Downloads (all assets, all releases)" src="https://img.shields.io/github/downloads/IridiumIO/CompactGUI/total?style=for-the-badge&logo=github"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+  
+  <a href="https://github.com/IridiumIO/CompactGUI/releases">
+    <img alt="GitHub Release" src="https://img.shields.io/github/v/release/IridiumIO/CompactGUI?style=for-the-badge"></a>
   </br> 
 </p>
 
@@ -15,24 +16,33 @@
 &nbsp;
 
 <p align="center"><img src="CompactGUI/assets/Home.png" width="750"/></p>
-
+<p align="center">
+<img src="CompactGUI/assets/Compression.png" width="250"/>
+<img src="CompactGUI/assets/Database.png" width="250"/>
+<img src="CompactGUI/assets/Watcher.png" width="250"/>
+</p>
 
 ---
+
+
 <p align="center">
-  <a href="README.md">English</a> -
-  <a href="README_ru.md">Русский</a> -
-  <a href="README_cn.md">简体中文</a>
+  <a href="README/"><img src="https://img.shields.io/badge/Readme%20Translations-606070?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iNDhweCIgdmlld0JveD0iMCAtOTYwIDk2MCA5NjAiIHdpZHRoPSI0OHB4IiBmaWxsPSIjYTFlMWZmIj48cGF0aCBkPSJNMzIzLTExMS41UTI1MC0xNDMgMTk2LTE5N3QtODUtMTI3LjVRODAtMzk4IDgwLTQ4MnQzMS0xNTYuNVExNDItNzExIDE5Ni03NjV0MTI3LTg0LjVRMzk2LTg4MCA0ODAtODgwdDE1NyAzMC41UTcxMC04MTkgNzY0LTc2NXQ4NSAxMjYuNVE4ODAtNTY2IDg4MC00ODJ0LTMxIDE1Ny41UTgxOC0yNTEgNzY0LTE5N3QtMTI3IDg1LjVRNTY0LTgwIDQ4MC04MHQtMTU3LTMxLjVaTTQ4MC0xMzhxMzUtMzYgNTguNS04Mi41VDU3Ny0zMzFIMzg0cTE0IDYwIDM3LjUgMTA4dDU4LjUgODVabS04NS0xMnEtMjUtMzgtNDMtODJ0LTMwLTk5SDE3MnEzOCA3MSA4OCAxMTEuNVQzOTUtMTUwWm0xNzEtMXE3Mi0yMyAxMjkuNS02OVQ3ODgtMzMxSDYzOXEtMTMgNTQtMzAuNSA5OFQ1NjYtMTUxWk0xNTItMzkxaDE1OXEtMy0yNy0zLjUtNDguNVQzMDctNDgycTAtMjUgMS00NC41dDQtNDMuNUgxNTJxLTcgMjQtOS41IDQzdC0yLjUgNDVxMCAyNiAyLjUgNDYuNVQxNTItMzkxWm0yMjEgMGgyMTVxNC0zMSA1LTUwLjV0MS00MC41cTAtMjAtMS0zOC41dC01LTQ5LjVIMzczcS00IDMxLTUgNDkuNXQtMSAzOC41cTAgMjEgMSA0MC41dDUgNTAuNVptMjc1IDBoMTYwcTctMjQgOS41LTQ0LjVUODIwLTQ4MnEwLTI2LTIuNS00NXQtOS41LTQzSDY0OXEzIDM1IDQgNTMuNXQxIDM0LjVxMCAyMi0xLjUgNDEuNVQ2NDgtMzkxWm0tMTAtMjM5aDE1MHEtMzMtNjktOTAuNS0xMTVUNTY1LTgxMHEyNSAzNyA0Mi41IDgwVDYzOC02MzBabS0yNTQgMGgxOTRxLTExLTUzLTM3LTEwMi41VDQ4MC04MjBxLTMyIDI3LTU0IDcxdC00MiAxMTlabS0yMTIgMGgxNTFxMTEtNTQgMjgtOTYuNXQ0My04Mi41cS03NSAxOS0xMzEgNjR0LTkxIDExNVoiLz48L3N2Zz4="/></a>
 </p>
+
+
 &nbsp;
 
-**What is `compact.exe`?**
-It's a commandlet with a collection of new algorithms introduced in Windows 10 that allow you to transparently compress games, programs and other folders with virtually no performance loss. CompactGUI simply leverages the same API to expose the functionality in a more user-friendly way. 
+**How it works**:
+
+CompactGUI is a friendly interface that makes use of the underlying filesystem compression algorithms exposed by the Windows Overlay Filter (WOF) Driver, utilising high-performance compression that was first introduced in Windows 10. It allows compression of any files or folders (with a focus on games) to occur transparently, without any resultant performance loss and allowing large disk storage savings.
 
 **Transparently? What does that mean?**
+
 Transparent compression means that files can still be used normally on the computer as if nothing had happened - they don't get repackaged like Zip and Rar files do. You can still browse, launch games and programs exactly as you did before, except they take up less space.
 
 **How is this different from the built-in compression in older versions of Windows?**
-This is similar to the old compression built-in to Windows (Right click > Properties > Compress to save space) however the newer algorithms introduced in Windows 10+ are far superior, resulting in greater compression ratios with almost no performance impact. Those with older HDDs may even see a performance gain in the form of reduced loading times - smaller files can be read into RAM faster, and the CPU can decompress them on the fly much faster than a typical HDD can supply them. [More information can be found here](https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx)
+
+This is _similar_ to the old compression built-in to Windows (Right click > Properties > Compress to save space) however the newer algorithms introduced in Windows 10+ are far superior, resulting in greater compression ratios with almost no performance impact. [More information can be found here](<https://msdn.microsoft.com/en-us/library/windows/desktop/hh920921(v=vs.85).aspx>)
 
 <h2>Installation  </h> 
    
@@ -40,7 +50,8 @@ This is similar to the old compression built-in to Windows (Right click > Proper
 
 <img alt="Static Badge" src="https://img.shields.io/badge/DOWNLOAD%20From%20Github-steelblue?style=for-the-badge&logo=github&link=https%3A%2F%2Fgithub.com%2FIridiumIO%2FCompactGUI%2Freleases">
 
-Or install with Winget: 
+Or install with Winget:
+
 ```py
 winget install CompactGUI
 ```
@@ -52,21 +63,20 @@ Use this tool to compress folders while still being able to use/run them normall
 - Reduce the size of games (e.g. ARK-Survival Evolved: 169 GB > 91.2 GB)
 - Reduce the size of programs (e.g. Adobe Photoshop: 1.71 GB > 886 MB)
 - Compress any other folder on your computer
-  
+
 ## Extra Features
 
 - Visual feedback on compression progress and statistics
-- Configurable list of poorly-compressed filetypes that can be skipped.
-- Online integration with community-sourced [database](https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results) to get compression estimates
-  - Steam game results can be submitted to the online database from within CompactGUI
+- Configurable list of poorly-compressed filetypes that can be skipped, editable per-folder
+- Compression Estimation - built using over 100,000 community submission (honestly it was way more, but I didn't realise google forms broke at 100,000 so I've lost a lot of submissions) for accurate data on many Steam Games
+  - Non-Steam games can still utilise an algorithmic estimation instead that still gives a reasonable idea of compressability.
+  - If you would like to contribute, Steam game results can be submitted to the online database from within CompactGUI
 - Integration into Windows Explorer context menus for easier use.
 - Analyze the status of existing folders
 - Background Watcher - keeps track of folders and monitors them for changes (e.g. Steam game updates) and automatically keeps them compressed in the background.
 
 <h4 align="center"><b>See the <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results">Wiki</a> for a list of <a href="https://github.com/ImminentFate/CompactGUI/wiki/Community-Compression-Results"><img src="https://img.shields.io/badge/12809-Games-blue.svg"></a> that have been tested from over 100,000 submissions </b></h3>
 <p>&nbsp;</p>
-
-<p align="center"><img src="CompactGUI/assets/Watcher.png" width="750"/></p>
 
 ## Caveat
 
@@ -80,11 +90,26 @@ Windows 10 introduced a little-known but very useful tool called `compact.exe` t
 
 As program folders and games can be shrunk by up to 60%, this has the added bonus of potentially reducing load times - especially on slower HDDs.
 
-More information on the inbuilt Windows function can be found [here](https://technet.microsoft.com/library/bb490884.aspx) and [here](https://msdn.microsoft.com/library/windows/desktop/hh920921(v=vs.85).aspx) or by typing `compact /q` into the commandline
+More information on the inbuilt Windows function can be found [here](https://technet.microsoft.com/library/bb490884.aspx) and [here](<https://msdn.microsoft.com/library/windows/desktop/hh920921(v=vs.85).aspx>) or by typing `compact /q` into the commandline
 
 This tool is intentionally designed to only compress folders and files. Whole drives and entire Windows installations cannot be modified from within CompactGUI - users seeking that functionality should use `compact /compactOS` from the commandline.
 
 The compression is fully transparent - programs, games and files can still be accessed as normal, and show up in Explorer as they normally would — they'll just be decompressed into RAM at runtime, staying compressed on disk.
+
+## Development
+
+The solution targets .NET 10 and uses the upstream `IridiumIO/LazyTranslate` source to build its localisation packages. From a clean checkout, run:
+
+```powershell
+./eng/Prepare-LazyTranslate.ps1
+dotnet restore CompactGUI.slnx
+dotnet build CompactGUI.slnx --configuration Release --no-restore
+dotnet test CompactGUI.slnx --configuration Release --no-build --no-restore
+```
+
+The preparation script checks out a pinned upstream revision into the sibling `LazyTranslate` directory, refuses to overwrite a dirty checkout, and builds the two local NuGet packages. GitHub Actions runs the same build/test sequence, Dependabot tracks NuGet and Actions, and CodeQL scans the C# projects.
+
+SonarCloud CI is ready once repository variables `SONAR_ORGANIZATION` and `SONAR_PROJECT_KEY` and the repository secret `SONAR_TOKEN` are configured. The scan waits for and enforces the Quality Gate; it is not reported as configured until those account-specific values are supplied.
 
 ## Compression Modes
 
@@ -92,22 +117,18 @@ By default, the program runs Compact with the `XPRESS8K` algorithm active. This 
 
 Optional Compression Modes:
 
-Algorithm|Core Advantages|Detailed Description
-:---|:---|:---
-XPRESS4K|Fastest, but weakest|Suitable for game files with extremely high read speed requirements, it can maximize performance while compressing.
-XPRESS8K|Balance of speed and compression|A better balance has been achieved between compression speed and compression ratio.
-XPRESS16K|Slower, but stronger|Suitable for scenarios with limited storage space and low loading speed requirements.
-LZX|Slowest, but strongest|Suitable for storing archived files, backup data, or cold data that is not frequently accessed.
+| Algorithm | Core Advantages                  | Detailed Description                                                                                                |
+| :-------- | :------------------------------- | :------------------------------------------------------------------------------------------------------------------ |
+| XPRESS4K  | Fastest, but weakest             | Suitable for game files with extremely high read speed requirements, it can maximize performance while compressing. |
+| XPRESS8K  | Balance of speed and compression | A better balance has been achieved between compression speed and compression ratio.                                 |
+| XPRESS16K | Slower, but stronger             | Suitable for scenarios with limited storage space and low loading speed requirements.                               |
+| LZX       | Slowest, but strongest           | Suitable for storing archived files, backup data, or cold data that is not frequently accessed.                     |
 
- ---
-
-### Screenshots
-<p align="center"><img src="CompactGUI/assets/Compression.png" width="750"/></p>
-<p align="center"><img src="CompactGUI/assets/Database.png" width="750"/></p>
+---
 
 ### Like this project?
 
- Please consider leaving a tip on Ko-Fi :)
+Please consider leaving a tip on Ko-Fi :)
 
  <p align="center"><a href='https://ko-fi.com/iridiumio' target='_blank'><img height='42' style='border:0px;height:42px;' src='https://cdn.ko-fi.com/cdn/kofi3.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a></p>
-  
+

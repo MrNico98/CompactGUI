@@ -12,9 +12,15 @@ Public Class SettingsService : Implements ISettingsService
     Public ReadOnly Property SettingsVersion As Decimal Implements ISettingsService.SettingsVersion
     Public Property AppSettings As Settings Implements ISettingsService.AppSettings
 
-    Public Sub New()
+    Public Sub New(truePortable As Boolean)
 
-        DataFolder = New IO.DirectoryInfo(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO", "CompactGUI"))
+        If truePortable Then
+            DataFolder = New IO.DirectoryInfo(IO.Path.Combine(IO.Path.GetDirectoryName(AppContext.BaseDirectory), ".CompactGUIData"))
+        Else
+            DataFolder = New IO.DirectoryInfo(IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IridiumIO", "CompactGUI"))
+        End If
+
+
         SettingsJSONFile = New IO.FileInfo(IO.Path.Combine(DataFolder.FullName, "settings.json"))
 
         SettingsVersion = 1.2
@@ -33,10 +39,14 @@ Public Class SettingsService : Implements ISettingsService
 
             AppSettings = New Settings With {.SettingsVersion = SettingsVersion, .NonCompressableList = skipList}
 
-            Dim msgError As New Wpf.Ui.Controls.ContentDialog With {.Title = $"New Settings Version {SettingsVersion} Detected", .Content = "Your settings have been reset to their default to accommodate the update", .CloseButtonText = "OK"}
+            Dim msgError As New Wpf.Ui.Controls.ContentDialog With {.Title = $"New Settings Version {SettingsVersion} Detected", .Content = "Your settings have been reset to their default to accommodate the update".LT(), .CloseButtonText = "OK"}
             msgError.ShowAsync()
 
         End If
+
+        If AppSettings.DisableHardwareRendering Then RenderOptions.ProcessRenderMode = System.Windows.Interop.RenderMode.SoftwareOnly
+
+
 
         Dim output = JsonSerializer.Serialize(AppSettings, Jsonoptions)
         IO.File.WriteAllText(SettingsJSONFile.FullName, output)
@@ -76,7 +86,7 @@ Public Class SettingsService : Implements ISettingsService
         Catch ex As Exception
             validatedSettings = New Settings With {.SettingsVersion = SettingsVersion}
 
-            Dim msgError As New Wpf.Ui.Controls.ContentDialog With {.Title = $"Corrupted Settings File Detected", .Content = "Your settings have been reset to their default.", .CloseButtonText = "OK"}
+            Dim msgError As New Wpf.Ui.Controls.ContentDialog With {.Title = $"Corrupted Settings File Detected".LT(), .Content = "Your settings have been reset to their default.".LT(), .CloseButtonText = "OK"}
             msgError.ShowAsync()
 
 
